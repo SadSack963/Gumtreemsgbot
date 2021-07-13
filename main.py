@@ -11,8 +11,8 @@ from webdrivermanager.chrome import ChromeDriverManager
 
 
 
-USERNAME = "tredarius130@omheightsy.com"
-PASSWORD = "gordon5858!"
+USERNAME = "username"
+PASSWORD = "password"
 
 # User Agent randomly change
 
@@ -35,7 +35,7 @@ options.add_argument('--disable-gpu')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--no-sandbox')
 
-chrome_driver_path = "C:\\Users\\Chels\\Desktop\\Development\\chromedriver.exe"
+chrome_driver_path = "C:\\Users\\Desktop\\Development\\chromedriver.exe"
 driver = webdriver.Chrome(options=options, executable_path=chrome_driver_path)
 
 url = "https://www.gumtree.com.au/"
@@ -78,8 +78,6 @@ watch_list = ("washer",
                "imac",
                "pram",
                "boat",
-               "timber",
-               "active"
                )
 
 excluded_words =("broken",
@@ -92,7 +90,7 @@ excluded_words =("broken",
                  )
 
 page = 1
-free_url = "https://www.gumtree.com.au/s-coogee-sydney/page-" + str(page) + "l3003642r20?price-type=free"
+free_url = "https://www.gumtree.com.au/sydney/page-" + str(page) + "l3003642r20?price-type=free"
 
 driver.get(free_url)
 driver.set_page_load_timeout(5)
