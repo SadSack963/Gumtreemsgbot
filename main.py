@@ -1,14 +1,14 @@
-import useragent as useragent
+import useragent
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import time
 from random import randint, choice
 import requests
-from fake-useragent import UserAgent
+from fake_useragent import UserAgent
 import os
 from webdrivermanager.chrome import ChromeDriverManager
-
+import selenium.common.exceptions as exceptions
 
 
 USERNAME = "username"
@@ -35,7 +35,7 @@ options.add_argument('--disable-gpu')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--no-sandbox')
 
-chrome_driver_path = "C:\\Users\\Desktop\\Development\\chromedriver.exe"
+chrome_driver_path = "E:/Python/WebDriver/chromedriver.exe"
 driver = webdriver.Chrome(options=options, executable_path=chrome_driver_path)
 
 url = "https://www.gumtree.com.au/"
@@ -62,6 +62,7 @@ def login():
 watch_list = ("washer",
               "washing machine",
               "gaming chair",
+              "Netball",
               "monitor",
               "desktop",
               "playstation",
@@ -71,23 +72,23 @@ watch_list = ("washer",
               "bicycle",
               "Samsung",
               "surfboard",
-               "board game",
-               "monopoly",
-               "nintendo",
-               "apple",
-               "imac",
-               "pram",
-               "boat",
-               )
+              "board game",
+              "monopoly",
+              "nintendo",
+              "apple",
+              "imac",
+              "pram",
+              "boat",
+              )
 
-excluded_words =("broken",
-                 "faulty",
-                 "repair",
-                 "parts",
-                 "damage",
-                 "for parts",
-                 "not working"
-                 )
+excluded_words = ("broken",
+                  "faulty",
+                  "repair",
+                  "parts",
+                  "damage",
+                  "for parts",
+                  "not working"
+                  )
 
 page = 1
 free_url = "https://www.gumtree.com.au/sydney/page-" + str(page) + "l3003642r20?price-type=free"
@@ -98,15 +99,39 @@ driver.set_page_load_timeout(5)
 # prepare message template
 message_template = "Hey you! Is this still available? Super keen. When do you need it gone by? Let's set a time :)"
 
-# search if description has keywords
 
+# search if description has keywords
 def selectAd():
     count = 1
     xPath = driver.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div[3]/main/section/div[2]/div/a["
                                          + str(count) + "]/div[2]/div/p")
     xPath.click()
     time.sleep(3)
-    search_keywords = driver.find_elements_by_class_name("//*[contains(text()=" + f"({watch_list}, {excluded_words})]")
+
+    item_found = False
+    ad_container = driver.find_element_by_xpath(f"//*[@class='vip-ad__container']")
+    print("Searching through watch_list\n============================")
+    for word in watch_list:
+        try:
+            search_keywords = ad_container.find_element_by_xpath(f".//*[contains(text(), \"{word}\")]")
+            if search_keywords:
+                print(f'Found Keyword \"{word}\" in \"{search_keywords.text}\"')
+                item_found = True
+        except exceptions.NoSuchElementException:
+            print(f"Keyword \"{word}\" not found")
+
+    print("\nSearching through excluded_words\n================================")
+    for word in excluded_words:
+        try:
+            search_keywords = ad_container.find_element_by_xpath(f".//*[contains(text(), \"{word}\")]")
+            if search_keywords:
+                print(f'Found Keyword \"{word}\" in \"{search_keywords.text}\"')
+                item_found = False
+        except exceptions.NoSuchElementException:
+            print(f"Keyword \"{word}\" not found")
+    return item_found
+
+
     if search_keywords != watch_list or search_keywords == excluded_words:
         driver.back()
         count += 1
@@ -121,14 +146,11 @@ def selectAd():
         count += 1
 
 
-
-selectAd()
+send_email = selectAd()
 
 # change search results to max
 
 # run all functions parallel
 
 
-
-#driver.quit()
-
+# driver.quit()
