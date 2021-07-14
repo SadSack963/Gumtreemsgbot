@@ -102,14 +102,14 @@ def search_ads():
 
         print("Searching through watch_list\n============================")
         for word in watch_list:
-            if word in ad_title or word in ad_description:
+            if word.lower() in ad_title.lower() or word.lower() in ad_description.lower():
                 print(f'Found Watch Word: \"{word}\"')
                 item_found = True
                 break
 
         print("\nSearching through excluded_words\n================================")
         for word in excluded_words:
-            if word in ad_title or word in ad_description:
+            if word.lower() in ad_title.lower() or word.lower() in ad_description.lower():
                 print(f'Found Excluded Word: \"{word}\"')
                 item_found = False
                 break
