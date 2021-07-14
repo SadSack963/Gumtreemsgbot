@@ -94,8 +94,8 @@ def search_ads():
     ads_section = driver.find_element_by_xpath('//*[@id="react-root"]/div/div[3]/div/div[3]/main/section')
     user_ad_list = ads_section.find_elements_by_tag_name('a')
 
-    item_found = False
     for user_ad in user_ad_list:
+        item_found = False
         ad_href = user_ad.get_attribute('href')
         ad_title = user_ad.find_element_by_class_name('user-ad-row-new-design__title-span').text
         ad_description = user_ad.find_element_by_class_name('user-ad-row-new-design__description-text').text
